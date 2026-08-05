@@ -19,48 +19,35 @@ function WaveTile({ color, opacity }: WaveTileProps) {
   );
 }
 
+interface Wave {
+  position: string;
+  reverse?: boolean;
+  duration: string;
+  color: string;
+  opacity: number;
+}
+
+const WAVES: Wave[] = [
+  { position: 'top-0 h-56', duration: '45s', color: 'var(--clr-primary)', opacity: 0.06 },
+  { position: 'top-16 h-48', reverse: true, duration: '32s', color: 'var(--clr-primary-dark)', opacity: 0.05 },
+  { position: 'top-32 h-40', duration: '24s', color: 'var(--clr-primary-light)', opacity: 0.07 },
+  { position: 'bottom-0 h-56', reverse: true, duration: '38s', color: 'var(--clr-primary)', opacity: 0.04 },
+  { position: 'bottom-16 h-48', duration: '26s', color: 'var(--clr-accent)', opacity: 0.04 },
+];
+
 export default function WavesBackground() {
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-      <div
-        className="absolute inset-x-0 top-0 h-56 wave-drift"
-        style={{ animationDuration: '45s', opacity: 1 }}
-      >
-        <WaveTile color="var(--clr-primary)" opacity={0.06} />
-        <WaveTile color="var(--clr-primary)" opacity={0.06} />
-      </div>
-
-      <div
-        className="absolute inset-x-0 top-16 h-48 wave-drift wave-drift-reverse"
-        style={{ animationDuration: '32s' }}
-      >
-        <WaveTile color="var(--clr-primary-dark)" opacity={0.05} />
-        <WaveTile color="var(--clr-primary-dark)" opacity={0.05} />
-      </div>
-
-      <div
-        className="absolute inset-x-0 top-32 h-40 wave-drift"
-        style={{ animationDuration: '24s' }}
-      >
-        <WaveTile color="var(--clr-primary-light)" opacity={0.07} />
-        <WaveTile color="var(--clr-primary-light)" opacity={0.07} />
-      </div>
-
-      <div
-        className="absolute inset-x-0 bottom-0 h-56 wave-drift wave-drift-reverse"
-        style={{ animationDuration: '38s' }}
-      >
-        <WaveTile color="var(--clr-primary)" opacity={0.04} />
-        <WaveTile color="var(--clr-primary)" opacity={0.04} />
-      </div>
-
-      <div
-        className="absolute inset-x-0 bottom-16 h-48 wave-drift"
-        style={{ animationDuration: '26s' }}
-      >
-        <WaveTile color="var(--clr-accent)" opacity={0.04} />
-        <WaveTile color="var(--clr-accent)" opacity={0.04} />
-      </div>
+      {WAVES.map((wave, index) => (
+        <div
+          key={index}
+          className={`absolute inset-x-0 ${wave.position} wave-drift ${wave.reverse ? 'wave-drift-reverse' : ''}`}
+          style={{ animationDuration: wave.duration }}
+        >
+          <WaveTile color={wave.color} opacity={wave.opacity} />
+          <WaveTile color={wave.color} opacity={wave.opacity} />
+        </div>
+      ))}
     </div>
   );
 }

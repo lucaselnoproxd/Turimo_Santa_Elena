@@ -29,9 +29,6 @@ export default function ThemeProvider({ children }: ThemeProviderProps) {
     root.style.setProperty('--clr-footer-text', c.footerText);
     root.style.setProperty('--clr-footer-accent', c.footerAccent);
     root.style.setProperty('--clr-surface', c.surface);
-    root.style.setProperty('--clr-overlay-top', c.overlayTop);
-    root.style.setProperty('--clr-overlay-mid', c.overlayMid);
-    root.style.setProperty('--clr-overlay-bottom', c.overlayBottom);
   }, []);
 
   return <>{children}</>;

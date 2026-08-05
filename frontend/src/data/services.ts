@@ -1,3 +1,19 @@
+// ============================================================
+// HOTELES Y GUIAS TURISTICOS
+// ============================================================
+// FOTO DE PERFIL:
+//   Pon la foto del hotel en frontend/public/images/hoteles/ y
+//   la del guía en frontend/public/images/guias/. Luego escribe
+//   la ruta en el campo `photo` (ej: '/images/hoteles/ola-verde.jpg').
+//   Si dejas `photo` vacío se muestra un avatar con sus iniciales.
+//
+// CONTACTO (botones configurables):
+//   Cada hotel/guía tiene su botón de WhatsApp/email. Si dejas un
+//   campo vacío, el botón usa el contacto general de
+//   src/config/site.ts (edítalo para cambiarlo en todo el sitio).
+
+import type { ContactInfo } from '../config/site';
+
 export interface Hotel {
   id: string;
   beachId: string;
@@ -6,6 +22,8 @@ export interface Hotel {
   priceRange: string;
   rating: number;
   amenities: string[];
+  photo?: string;
+  contact: ContactInfo;
 }
 
 export interface Guide {
@@ -16,6 +34,8 @@ export interface Guide {
   experience: string;
   languages: string[];
   rating: number;
+  photo?: string;
+  contact: ContactInfo;
 }
 
 export const hotels: Hotel[] = [
@@ -27,6 +47,7 @@ export const hotels: Hotel[] = [
     priceRange: '$40 - $80',
     rating: 4,
     amenities: ['Wifi gratis', 'Piscina', 'Desayuno incluido', 'Vista al mar'],
+    contact: {},
   },
   {
     id: 'hotel-montanita-2',
@@ -36,6 +57,7 @@ export const hotels: Hotel[] = [
     priceRange: '$25 - $55',
     rating: 4,
     amenities: ['Clases de surf', 'Zona de yoga', 'Wifi gratis', 'Restaurante'],
+    contact: {},
   },
   {
     id: 'hotel-salinas-1',
@@ -45,6 +67,7 @@ export const hotels: Hotel[] = [
     priceRange: '$90 - $160',
     rating: 5,
     amenities: ['Piscina infinita', 'Spa', 'Restaurante gourmet', 'Estacionamiento'],
+    contact: {},
   },
   {
     id: 'hotel-salinas-2',
@@ -54,6 +77,7 @@ export const hotels: Hotel[] = [
     priceRange: '$20 - $40',
     rating: 3,
     amenities: ['Wifi gratis', 'Cocina compartida', 'Terraza'],
+    contact: {},
   },
   {
     id: 'hotel-ayangue-1',
@@ -63,6 +87,7 @@ export const hotels: Hotel[] = [
     priceRange: '$45 - $90',
     rating: 5,
     amenities: ['Frente al mar', 'Hamacas', 'Wifi gratis', 'Desayuno'],
+    contact: {},
   },
   {
     id: 'hotel-ayangue-2',
@@ -72,6 +97,7 @@ export const hotels: Hotel[] = [
     priceRange: '$35 - $70',
     rating: 4,
     amenities: ['Tours de ballenas', 'Desayuno casero', 'Wifi gratis'],
+    contact: {},
   },
   {
     id: 'hotel-ballenita-1',
@@ -81,6 +107,7 @@ export const hotels: Hotel[] = [
     priceRange: '$30 - $60',
     rating: 4,
     amenities: ['Restaurante', 'Vista al mar', 'Wifi gratis'],
+    contact: {},
   },
   {
     id: 'hotel-ballenita-2',
@@ -90,6 +117,7 @@ export const hotels: Hotel[] = [
     priceRange: '$20 - $50',
     rating: 4,
     amenities: ['Clases de surf', 'Equipo incluido', 'Dormitorios compartidos'],
+    contact: {},
   },
   {
     id: 'hotel-chuyuipe-1',
@@ -99,6 +127,7 @@ export const hotels: Hotel[] = [
     priceRange: '$40 - $85',
     rating: 5,
     amenities: ['Ecológico', 'Tours de naturaleza', 'Desayuno', 'Wifi'],
+    contact: {},
   },
   {
     id: 'hotel-chuyuipe-2',
@@ -108,6 +137,7 @@ export const hotels: Hotel[] = [
     priceRange: '$10 - $20',
     rating: 3,
     amenities: ['Frente a la playa', 'Baños', 'Zona de fogata'],
+    contact: {},
   },
   {
     id: 'hotel-chipipe-1',
@@ -117,6 +147,7 @@ export const hotels: Hotel[] = [
     priceRange: '$55 - $100',
     rating: 4,
     amenities: ['Piscina', 'Desayuno americano', 'Wifi gratis', 'Estacionamiento'],
+    contact: {},
   },
   {
     id: 'hotel-chipipe-2',
@@ -126,6 +157,7 @@ export const hotels: Hotel[] = [
     priceRange: '$60 - $120',
     rating: 4,
     amenities: ['Cocina equipada', 'Vista al mar', 'Wifi gratis'],
+    contact: {},
   },
 ];
 
@@ -138,6 +170,7 @@ export const guides: Guide[] = [
     experience: '10 años de experiencia',
     languages: ['Español', 'Inglés'],
     rating: 5,
+    contact: {},
   },
   {
     id: 'guia-montanita-2',
@@ -147,6 +180,7 @@ export const guides: Guide[] = [
     experience: '6 años de experiencia',
     languages: ['Español'],
     rating: 4,
+    contact: {},
   },
   {
     id: 'guia-salinas-1',
@@ -156,6 +190,7 @@ export const guides: Guide[] = [
     experience: '12 años de experiencia',
     languages: ['Español', 'Inglés'],
     rating: 5,
+    contact: {},
   },
   {
     id: 'guia-salinas-2',
@@ -165,6 +200,7 @@ export const guides: Guide[] = [
     experience: '4 años de experiencia',
     languages: ['Español', 'Inglés', 'Francés'],
     rating: 4,
+    contact: {},
   },
   {
     id: 'guia-ayangue-1',
@@ -174,6 +210,7 @@ export const guides: Guide[] = [
     experience: '8 años de experiencia',
     languages: ['Español', 'Inglés'],
     rating: 5,
+    contact: {},
   },
   {
     id: 'guia-ayangue-2',
@@ -183,6 +220,7 @@ export const guides: Guide[] = [
     experience: '5 años de experiencia',
     languages: ['Español'],
     rating: 4,
+    contact: {},
   },
   {
     id: 'guia-ballenita-1',
@@ -192,6 +230,7 @@ export const guides: Guide[] = [
     experience: '15 años de experiencia',
     languages: ['Español'],
     rating: 4,
+    contact: {},
   },
   {
     id: 'guia-chuyuipe-1',
@@ -201,6 +240,7 @@ export const guides: Guide[] = [
     experience: '7 años de experiencia',
     languages: ['Español', 'Inglés'],
     rating: 5,
+    contact: {},
   },
   {
     id: 'guia-chipipe-1',
@@ -210,6 +250,7 @@ export const guides: Guide[] = [
     experience: '3 años de experiencia',
     languages: ['Español', 'Inglés'],
     rating: 4,
+    contact: {},
   },
 ];
 

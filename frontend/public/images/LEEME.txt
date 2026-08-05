@@ -1,0 +1,45 @@
+﻿CARPETA DE IMAGENES DE LA PAGINA
+================================
+Cada experiencia (surf, ciclismo, ballenas...) tiene su propia subcarpeta.
+
+COMO CAMBIAR UNA IMAGEN (sin tocar codigo):
+1. Abre la subcarpeta de la experiencia: frontend/public/images/<experiencia>/
+2. Reemplaza el archivo por tu imagen manteniendo el MISMO nombre:
+   - cover.jpg      -> imagen principal (carrusel, tarjetas, pagina)
+   - gallery-1.jpg  -> primera foto de la galeria
+   - gallery-2.jpg  -> segunda foto de la galeria
+   - gallery-3.jpg  -> etc.
+3. Listo, la pagina usara tu imagen automaticamente.
+
+Si quieres agregar MAS fotos de galeria, agrega archivos con el siguiente
+numero (gallery-4.jpg, gallery-5.jpg...) y agregalos a la lista `gallery`
+en frontend/src/data/activities.ts.
+
+Otras carpetas:
+  - carrusel/ -> imagenes del carrusel de la portada (cada foto en su
+                 archivo propio: surf.jpg, ballenas-jorobadas.jpg, etc.)
+  - playas/  -> fotos de las playas (reemplaza las de Unsplash)
+  - hoteles/ -> fotos de perfil de hoteles (nombre-hotel.jpg)
+  - guias/   -> fotos de perfil de guias (nombre-guia.jpg)
+  - sitio/   -> imagenes generales del sitio
+
+EL CARRUSEL DE LA PORTADA (separado del resto):
+================================================
+Las 6 imagenes de la portada viven SOLAS en  frontend/public/images/carrusel/
+y usan nombres fijos:
+  - surf.jpg
+  - ballenas-jorobadas.jpg
+  - snorkel.jpg
+  - gastronomia.jpg
+  - ecociclismo.jpg
+  - parapente.jpg
+Para cambiar la foto de una diapositiva del carrusel, solo reemplaza el
+archivo en esa carpeta manteniendo el mismo nombre. No afecta a las demas
+imagenes de las paginas de cada experiencia.
+
+CONTACTOS CONFIGURABLES
+=======================
+Todos los botones de contacto (whatsapp, email, telefono) se configuran en:
+  frontend/src/config/site.ts    -> datos generales del sitio
+  frontend/src/data/activities.ts -> operadoras de cada experiencia
+  frontend/src/data/services.ts   -> hoteles y guias

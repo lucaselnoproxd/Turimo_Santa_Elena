@@ -1,4 +1,4 @@
-export type ThemeName = keyof typeof themes;
+﻿export type ThemeName = keyof typeof themes;
 
 export interface ThemeColors {
   primary: string;
@@ -17,9 +17,6 @@ export interface ThemeColors {
   footerText: string;
   footerAccent: string;
   surface: string;
-  overlayTop: string;
-  overlayMid: string;
-  overlayBottom: string;
 }
 
 export const themes = {
@@ -42,14 +39,11 @@ export const themes = {
       footerText: 'rgba(144,202,249,0.6)',
       footerAccent: '#00b4d8',
       surface: '#e8f4f8',
-      overlayTop: '15%',
-      overlayMid: '40%',
-      overlayBottom: '85%',
     },
   },
 
   ocean: {
-    name: 'Océano Profundo',
+    name: 'OcÃ©ano Profundo',
     colors: {
       primary: '#0077b6',
       primaryDark: '#005c99',
@@ -67,9 +61,6 @@ export const themes = {
       footerText: 'rgba(144,202,249,0.6)',
       footerAccent: '#0077b6',
       surface: '#e3f2fd',
-      overlayTop: '0%',
-      overlayMid: '00%',
-      overlayBottom: '0%',
     },
   },
 
@@ -92,14 +83,11 @@ export const themes = {
       footerText: 'rgba(255,179,179,0.6)',
       footerAccent: '#ff6b6b',
       surface: '#fff5f5',
-      overlayTop: '15%',
-      overlayMid: '40%',
-      overlayBottom: '85%',
     },
   },
 
   tropical: {
-    name: 'Trópico Verde',
+    name: 'TrÃ³pico Verde',
     colors: {
       primary: '#2dc653',
       primaryDark: '#24a843',
@@ -117,12 +105,9 @@ export const themes = {
       footerText: 'rgba(129,199,132,0.6)',
       footerAccent: '#2dc653',
       surface: '#e8f5e9',
-      overlayTop: '15%',
-      overlayMid: '40%',
-      overlayBottom: '85%',
     },
   },
 } as const;
 
-// CAMBIA AQUÍ EL TEMA — solo cambia el string entre comillas
+// CAMBIA AQUÃ EL TEMA â€” solo cambia el string entre comillas
 export const activeTheme: ThemeName = 'tropical';
