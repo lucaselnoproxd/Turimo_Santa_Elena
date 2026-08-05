@@ -11,12 +11,14 @@ export default function Footer() {
   const mail = mailtoLink(siteConfig.contact.email);
   const tel = telLink(siteConfig.contact.phone);
 
-  const socials: { key: IconName; href: string }[] = [
+  const socialLinks: { key: IconName; href: string }[] = [
     { key: 'facebook', href: siteConfig.social.facebook },
     { key: 'instagram', href: siteConfig.social.instagram },
     { key: 'tiktok', href: siteConfig.social.tiktok },
     { key: 'youtube', href: siteConfig.social.youtube },
-  ].filter((s) => s.href);
+  ];
+
+  const socials = socialLinks.filter((s) => s.href);
 
   return (
     <footer
