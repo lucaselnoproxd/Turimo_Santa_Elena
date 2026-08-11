@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import Icon from './Icon';
+import CoverImage from './CoverImage';
 import type { Activity } from '../data/activities';
 import { getCategoryById, categoryColor } from '../data/activities';
 
@@ -18,12 +19,7 @@ export default function ActivityCard({ activity, compact = false }: ActivityCard
       className={`gel-card shine push-card group block overflow-hidden ${compact ? '' : 'h-full flex flex-col'}`}
     >
       <div className={`relative overflow-hidden ${compact ? 'h-40' : 'h-52'}`}>
-        <img
-          src={activity.cover}
-          alt={activity.title}
-          loading="lazy"
-          className="w-full h-full object-cover object-center push-img"
-        />
+        <CoverImage src={activity.cover} alt={activity.title} imgClassName="push-img" wrapperClassName="" />
         <span
           className="absolute top-3 left-3 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white"
           style={{ background: color, boxShadow: '0 2px 10px rgba(0,0,0,0.3)' }}

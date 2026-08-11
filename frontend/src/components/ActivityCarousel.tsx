@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Icon from './Icon';
 import { getFeaturedActivities, getCategoryById, categoryColor, difficultyColor } from '../data/activities';
 import { carouselImage } from '../config/images';
+import CoverImage from './CoverImage';
 
 const AUTOPLAY_MS = 7000;
 
@@ -66,15 +67,14 @@ export default function ActivityCarousel() {
             aria-hidden={!active}
           >
             {/* Imagen limpia: SIN filtro sobre la foto */}
-            <div className="absolute inset-0 hero-shine">
-              <img
-                src={carouselImage(slide.slug)}
-                alt={slide.title}
-                className={`w-full h-full object-cover object-center transition-transform duration-[4000ms] ease-out ${
-                  active ? 'scale-105' : 'scale-100'
-                }`}
-              />
-            </div>
+            <CoverImage
+              src={carouselImage(slide.slug)}
+              alt={slide.title}
+              fullOnPortrait
+              imgClassName={`transition-transform duration-[4000ms] ease-out ${
+                active ? 'scale-105' : 'scale-100'
+              }`}
+            />
 
             {/* Scrim SOLO detrás del texto, para que sea legible */}
             <div className="absolute bottom-0 left-0 right-0 text-scrim">

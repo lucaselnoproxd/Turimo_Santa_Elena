@@ -7,6 +7,7 @@ import Section from '../components/Section';
 import GradientTitle from '../components/GradientTitle';
 import RatingStars from '../components/RatingStars';
 import TravelServices from '../components/TravelServices';
+import CoverImage from '../components/CoverImage';
 import { beaches } from '../data/beaches';
 
 export default function BeachDetailPage() {
@@ -43,10 +44,8 @@ export default function BeachDetailPage() {
 
       {/* Hero */}
       <section className="relative pt-16">
-        <div className="relative h-[380px] md:h-[480px] overflow-hidden">
-          <div className="absolute inset-0 hero-shine">
-            <img src={beach.imageUrl} alt={beach.name} className="w-full h-full object-cover object-center" />
-          </div>
+          <div className="relative h-[380px] md:h-[480px] overflow-hidden">
+            <CoverImage src={beach.imageUrl} alt={beach.name} />
           <div className="absolute inset-0"
             style={{
               background: 'linear-gradient(180deg, rgba(0,0,0,0.15) 0%, color-mix(in srgb, var(--clr-primary-deeper) 55%, transparent) 100%)',

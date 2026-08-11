@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Icon from './Icon';
+import { siteImages } from '../config/images';
+import { siteConfig } from '../config/site';
 import { categories, getActivitiesByCategory } from '../data/activities';
 
 type MenuKey = 'Acuaticas' | 'Culturales' | 'Deportivas' | 'Naturales';
@@ -11,6 +13,7 @@ export default function Navbar() {
   const [openMenu, setOpenMenu] = useState<MenuKey | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileMenu, setMobileMenu] = useState<MenuKey | null>(null);
+  const [logoFailed, setLogoFailed] = useState(false);
 
   return (
     <nav
@@ -30,21 +33,32 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <Link to="/" className="flex items-center gap-3">
-              <div
-                className="w-9 h-9 gel-btn flex items-center justify-center text-white text-base"
-                style={{ borderRadius: 0, boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.4), 0 4px 12px var(--clr-glow)' }}
-              >
-                <Icon name="brand" className="w-5 h-5" />
-              </div>
-              <div>
-                <span className="font-heading text-lg font-bold text-gradient">Santa Elena</span>
-                <span
-                  className="block text-[10px] font-body font-light tracking-widest uppercase -mt-0.5"
-                  style={{ color: 'var(--clr-text-muted)' }}
-                >
-                  Ecuador · Turismo
+              {logoFailed ? (
+                <span className="flex items-center gap-3">
+                  <span
+                    className="w-9 h-9 gel-btn flex items-center justify-center text-white text-base"
+                    style={{ borderRadius: 0, boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.4), 0 4px 12px var(--clr-glow)' }}
+                  >
+                    <Icon name="brand" className="w-5 h-5" />
+                  </span>
+                  <span>
+                    <span className="font-heading text-lg font-bold text-gradient">Santa Elena</span>
+                    <span
+                      className="block text-[10px] font-body font-light tracking-widest uppercase -mt-0.5"
+                      style={{ color: 'var(--clr-text-muted)' }}
+                    >
+                      Ecuador · Turismo
+                    </span>
+                  </span>
                 </span>
-              </div>
+              ) : (
+                <img
+                  src={siteImages.logo}
+                  alt={siteConfig.name}
+                  onError={() => setLogoFailed(true)}
+                  className="h-10 w-auto object-contain"
+                />
+              )}
             </Link>
 
             {/* Menú escritorio */}

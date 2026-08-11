@@ -8,6 +8,7 @@ import SectionHeading from '../components/SectionHeading';
 import GradientTitle from '../components/GradientTitle';
 import ContactButtons from '../components/ContactButtons';
 import ActivityCard from '../components/ActivityCard';
+import CoverImage from '../components/CoverImage';
 import {
   getActivityBySlug,
   getActivitiesByCategory,
@@ -65,11 +66,9 @@ export default function ActivityPage() {
 
       {/* Hero */}
       <section className="relative pt-16">
-        <div className="relative h-[420px] md:h-[540px] overflow-hidden">
-          <div className="absolute inset-0 hero-shine">
-            <img src={activity.cover} alt={activity.title} className="w-full h-full object-cover object-center" />
-          </div>
-          <div className="absolute bottom-0 left-0 right-0 text-scrim">
+          <div className="relative h-[420px] md:h-[540px] overflow-hidden">
+            <CoverImage src={activity.cover} alt={activity.title} />
+            <div className="absolute bottom-0 left-0 right-0 text-scrim">
             <div className="max-w-6xl mx-auto px-6 md:px-12 pt-32 pb-10">
               <Link
                 to="/"

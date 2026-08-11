@@ -43,7 +43,7 @@ export const themes = {
   },
 
   ocean: {
-    name: 'OcÃ©ano Profundo',
+    name: 'Océano Profundo',
     colors: {
       primary: '#0077b6',
       primaryDark: '#005c99',
@@ -87,7 +87,7 @@ export const themes = {
   },
 
   tropical: {
-    name: 'TrÃ³pico Verde',
+    name: 'Trópico Verde',
     colors: {
       primary: '#2dc653',
       primaryDark: '#24a843',
@@ -109,5 +109,5 @@ export const themes = {
   },
 } as const;
 
-// CAMBIA AQUÃ EL TEMA â€” solo cambia el string entre comillas
+// CAMBIA AQUÍ EL TEMA — solo cambia el string entre comillas
 export const activeTheme: ThemeName = 'tropical';
