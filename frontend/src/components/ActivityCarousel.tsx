@@ -4,6 +4,7 @@ import Icon from './Icon';
 import { getFeaturedActivities, getCategoryById, categoryColor, difficultyColor } from '../data/activities';
 import { carouselImage } from '../config/images';
 import CoverImage from './CoverImage';
+import { useSiteData } from '../context/SiteDataContext';
 
 const AUTOPLAY_MS = 7000;
 
@@ -33,7 +34,8 @@ function CarouselArrow({ direction, onClick, label }: CarouselArrowProps) {
 }
 
 export default function ActivityCarousel() {
-  const slides = getFeaturedActivities();
+  const { activities } = useSiteData();
+  const slides = getFeaturedActivities(activities);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const goTo = useCallback(

@@ -1,31 +1,25 @@
-// ============================================================
-// ACTIVIDADES / EXPERIENCIAS TURISTICAS
-// Contenido tomado de santaelena.travel
-// ============================================================
-// Las imágenes viven en frontend/public/images/<slug>/
-//   cover.jpg       -> imagen principal
-//   gallery-N.jpg   -> fotos de galería
-// Para cambiar una imagen: reemplaza el archivo, no este código.
-//
-// Para cambiar el WhatsApp de una operadora: edita `contact.whatsapp`
-// (número con código de país, sin "+"). Ej: "593982798091"
+import { Injectable, OnModuleInit } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Activity } from './activity.entity';
 
-import type { ContactInfo } from '../config/site';
-import { coverImage, galleryImage } from '../config/images';
-
-export type ActivityCategory = 'Acuaticas' | 'Culturales' | 'Deportivas' | 'Naturales';
-
-export interface Operator {
-  name: string;
-  contact: ContactInfo;
+interface SeedContact {
+  whatsapp?: string;
+  email?: string;
+  phone?: string;
+  website?: string;
 }
 
-export interface Activity {
-  id: string;
+interface SeedOperator {
+  name: string;
+  contact: SeedContact;
+}
+
+interface SeedActivity {
   slug: string;
   title: string;
   cardTitle: string;
-  category: ActivityCategory;
+  category: string;
   tagline: string;
   description: string[];
   cover: string;
@@ -33,52 +27,19 @@ export interface Activity {
   estacionalidad: string;
   horario: string;
   dificultad: string;
-  dificultadLevel: 'baja' | 'media' | 'alta';
-  operadores: Operator[];
+  dificultadLevel: string;
+  operadores: SeedOperator[];
   lugares: string[];
   transporte: string[];
   featured: boolean;
   beaches?: string[];
 }
 
-export interface Category {
-  id: ActivityCategory;
-  name: string;
-  short: string;
-  description: string;
-}
+const cover = (slug: string) => `/images/${slug}/cover.jpg`;
+const gallery = (slug: string, n: number) => `/images/${slug}/gallery-${n}.jpg`;
 
-export const categories: Category[] = [
+const data: SeedActivity[] = [
   {
-    id: 'Acuaticas',
-    name: 'Experiencias Acuáticas',
-    short: 'Acuáticas',
-    description: 'Ballenas, surf, buceo, paseos náuticos y playas paradisíacas.',
-  },
-  {
-    id: 'Culturales',
-    name: 'Experiencias Culturales',
-    short: 'Culturales',
-    description: 'Museos, iglesias, gastronomía, artesanías y tradiciones.',
-  },
-  {
-    id: 'Deportivas',
-    name: 'Experiencias Deportivas',
-    short: 'Deportivas',
-    description: 'Ecociclismo, senderismo y deportes acuáticos de adrenalina.',
-  },
-  {
-    id: 'Naturales',
-    name: 'Experiencias Naturales',
-    short: 'Naturales',
-    description: 'Aves, cacao, miel, fauna, paja toquilla y parapente.',
-  },
-];
-
-export const activities: Activity[] = [
-  // ==================== ACUÁTICAS ====================
-  {
-    id: 'surf',
     slug: 'surf',
     title: 'Conquista las olas y eleva tu adrenalina',
     cardTitle: 'Surf',
@@ -88,7 +49,7 @@ export const activities: Activity[] = [
       'Descubre la magia que trae el mar en una nueva forma: la libertad, y libera una explosión de adrenalina sobre cada ola.',
       'Desafía a grandes olas en un entorno ideal que fusiona la belleza natural de nuestras playas y el ambiente acogedor de sus habitantes. Puedes aprender a surfear o demostrar tu destreza en la tabla.',
     ],
-    cover: coverImage('surf'),
+    cover: cover('surf'),
     gallery: [],
     estacionalidad: 'Todo el año',
     horario: '06:00 - 18:00',
@@ -96,8 +57,14 @@ export const activities: Activity[] = [
     dificultadLevel: 'alta',
     operadores: [
       { name: 'Escuela Surf Paradise', contact: { whatsapp: '593987243126' } },
-      { name: 'Balsa Surf Camp Guest House', contact: { whatsapp: '593989714685' } },
-      { name: 'Olón New Wave Surf School', contact: { whatsapp: '593969460868' } },
+      {
+        name: 'Balsa Surf Camp Guest House',
+        contact: { whatsapp: '593989714685' },
+      },
+      {
+        name: 'Olón New Wave Surf School',
+        contact: { whatsapp: '593969460868' },
+      },
     ],
     lugares: ['Montañita', 'Olón', 'Ayangue', 'San Pedro', 'La Lobería'],
     transporte: [
@@ -114,7 +81,6 @@ export const activities: Activity[] = [
     beaches: ['montanita', 'salinas', 'ayangue'],
   },
   {
-    id: 'ballenas-jorobadas',
     slug: 'ballenas-jorobadas',
     title: 'Contempla la majestuosidad de las Ballenas Jorobadas',
     cardTitle: 'Ballenas Jorobadas',
@@ -125,7 +91,7 @@ export const activities: Activity[] = [
       'Entre junio y septiembre de cada año las costas de Santa Elena se convierten en el escenario de uno de los espectáculos más impresionantes de la naturaleza: la llegada de las majestuosas ballenas jorobadas.',
       'Estas gigantes del océano recorren miles de kilómetros desde la Antártida hasta las cálidas aguas ecuatorianas para reproducirse y parir sus crías, brindando la oportunidad única para observarlas de cerca. Guiados por expertos y con todas las medidas de seguridad, los paseos en bote te permitirán vivir este encuentro inolvidable con uno de los mamíferos más asombrosos del planeta.',
     ],
-    cover: coverImage('ballenas-jorobadas'),
+    cover: cover('ballenas-jorobadas'),
     gallery: [],
     estacionalidad: 'Junio - Septiembre',
     horario: 'Salinas: 09:30 - 17:00 | Ayangue: 08:00 - 16:00',
@@ -138,7 +104,10 @@ export const activities: Activity[] = [
       { name: 'Olcris S.A.', contact: { whatsapp: '593993848371' } },
       { name: 'Náutica Travel', contact: { whatsapp: '593993848371' } },
       { name: 'Ecuador Expedition', contact: { whatsapp: '593968831287' } },
-      { name: 'Tour Operator Padi Resort', contact: { whatsapp: '593968694822' } },
+      {
+        name: 'Tour Operator Padi Resort',
+        contact: { whatsapp: '593968694822' },
+      },
       { name: 'Viajeros del Mar', contact: { whatsapp: '593994628921' } },
       { name: 'Go Ayangue', contact: { whatsapp: '593985503275' } },
       { name: 'Aroninti S.A.', contact: { whatsapp: '593989578099' } },
@@ -151,7 +120,6 @@ export const activities: Activity[] = [
     beaches: ['salinas', 'ayangue'],
   },
   {
-    id: 'snorkel-2',
     slug: 'snorkel-2',
     title: 'Sumérgete en las maravillas submarinas',
     cardTitle: 'Buceo y Snorkel',
@@ -161,14 +129,17 @@ export const activities: Activity[] = [
       'Disfruta de una experiencia única explorando un mundo submarino biodiverso en una de las reservas marinas del Ecuador. Bucea en compañía de un instructor especializado del programa Discover Scuba Diving.',
       'Sumérgete en el azul, descubre la diversidad y el colorido que habita en el universo submarino. ¡Nada, observa, disfruta!',
     ],
-    cover: coverImage('snorkel'),
+    cover: cover('snorkel'),
     gallery: [],
     estacionalidad: 'Todo el año',
     horario: '09:00 - 18:00',
     dificultad: 'Dificultad Media',
     dificultadLevel: 'media',
     operadores: [
-      { name: 'Buceo Ecuador Diving School', contact: { whatsapp: '593999452058' } },
+      {
+        name: 'Buceo Ecuador Diving School',
+        contact: { whatsapp: '593999452058' },
+      },
       { name: 'Padi Resort', contact: { whatsapp: '593968694822' } },
       { name: 'Viajeros del Mar', contact: { whatsapp: '593994628921' } },
       { name: 'Go Ayangue', contact: { whatsapp: '593985503275' } },
@@ -179,7 +150,6 @@ export const activities: Activity[] = [
     beaches: ['ayangue'],
   },
   {
-    id: 'pasear-en-bote',
     slug: 'pasear-en-bote',
     title: 'Disfruta de paseos náuticos inolvidables',
     cardTitle: 'Paseos Náuticos',
@@ -190,7 +160,7 @@ export const activities: Activity[] = [
       'En Salinas y Ayangue encontrarás operadoras turísticas que ofertan paseos en embarcaciones debidamente registradas que cumplen con los parámetros de seguridad.',
       '¡Relájate, disfrútalo y vívelo!',
     ],
-    cover: coverImage('paseos-nauticos'),
+    cover: cover('paseos-nauticos'),
     gallery: [],
     estacionalidad: 'Todo el año',
     horario: 'Salinas: 09:30 - 17:00 | Ayangue: 08:00 - 16:00',
@@ -211,7 +181,6 @@ export const activities: Activity[] = [
     beaches: ['salinas', 'ayangue'],
   },
   {
-    id: 'sol-mar-y-playas',
     slug: 'sol-mar-y-playas',
     title: 'Disfruta del sol y del mar en paradisíacas playas',
     cardTitle: 'Sol, Mar y Playas',
@@ -221,7 +190,7 @@ export const activities: Activity[] = [
       'Fusiona la belleza natural, actividades recreativas y por supuesto, el sol y mar, visitando playas espectaculares de arena dorada y aguas cristalinas, aliadas estratégicas para escapar del bullicio y la vida cotidiana.',
       'Santa Elena es un destino que enamora con sus playas. Su entorno natural, relajantes arenas, exquisita gastronomía y la calidez de su gente la convierten en un destino para recorrer. Ofrece además gran cantidad de actividades y muchas opciones de diversión.',
     ],
-    cover: coverImage('sol-mar-playas'),
+    cover: cover('sol-mar-playas'),
     gallery: [],
     estacionalidad: 'Todo el año',
     horario: 'Todo el día',
@@ -265,12 +234,16 @@ export const activities: Activity[] = [
       'Taxis desde Salinas',
     ],
     featured: false,
-    beaches: ['montanita', 'salinas', 'ayangue', 'ballenita', 'chuyuipe', 'chipipe'],
+    beaches: [
+      'montanita',
+      'salinas',
+      'ayangue',
+      'ballenita',
+      'chuyuipe',
+      'chipipe',
+    ],
   },
-
-  // ==================== CULTURALES ====================
   {
-    id: 'compras-de-artesanias',
     slug: 'compras-de-artesanias',
     title: 'Lleva contigo nuestra esencia artesanal',
     cardTitle: 'Artesanías',
@@ -280,7 +253,7 @@ export const activities: Activity[] = [
       'Maravíllate con los productos de los mercados artesanales de las diferentes localidades de Santa Elena y descubre todo lo que las hábiles manos de sus artesanos pueden lograr transformando los materiales que esta tierra les da.',
       'Lleva un recuerdo a casa que pone de manifiesto el arte y la habilidad de los peninsulares mediante una rica variedad de productos que expresan la identidad y el patrimonio local. Desde artesanías elaboradas con paja toquilla hasta hermosas piezas de cerámica que cuentan historias de generaciones de tradición y destreza.',
     ],
-    cover: coverImage('artesanias'),
+    cover: cover('artesanias'),
     gallery: [],
     estacionalidad: 'Todo el año',
     horario: 'Todo el día',
@@ -299,7 +272,6 @@ export const activities: Activity[] = [
     featured: false,
   },
   {
-    id: 'culturas-milenarias',
     slug: 'culturas-milenarias',
     title: 'Descubre la historia de culturas milenarias',
     cardTitle: 'Culturas Milenarias',
@@ -309,7 +281,7 @@ export const activities: Activity[] = [
       'La provincia de Santa Elena es un territorio rico en historia y legado prehispánico, con importantes centros culturales que preservan y exhiben los vestigios de antiguas civilizaciones.',
       'Visita a los guardianes de la historia y la identidad cultural de la provincia de Santa Elena: nuestros museos, y observa las exhibiciones que van desde la vida marina hasta muestras de arte religioso y tradiciones locales.',
     ],
-    cover: coverImage('culturas-milenarias'),
+    cover: cover('culturas-milenarias'),
     gallery: [],
     estacionalidad: 'Todo el año',
     horario: 'Todo el día',
@@ -319,8 +291,14 @@ export const activities: Activity[] = [
       { name: 'Museo Amantes de Sumpa', contact: { whatsapp: '593991716124' } },
       { name: 'Museo Real Alto', contact: { whatsapp: '593988627357' } },
       { name: 'Museo Valdivia', contact: { whatsapp: '593990683456' } },
-      { name: 'Centro de Interpretación Los Ceibitos', contact: { whatsapp: '593967698353' } },
-      { name: 'Centro de Interpretación Sacachún', contact: { whatsapp: '593997357099' } },
+      {
+        name: 'Centro de Interpretación Los Ceibitos',
+        contact: { whatsapp: '593967698353' },
+      },
+      {
+        name: 'Centro de Interpretación Sacachún',
+        contact: { whatsapp: '593997357099' },
+      },
       { name: 'Museo Megaterio', contact: { whatsapp: '593997864780' } },
       { name: 'Casa de los 100 años', contact: { whatsapp: '593983390859' } },
     ],
@@ -336,7 +314,6 @@ export const activities: Activity[] = [
     featured: false,
   },
   {
-    id: 'disfrutar-gastronomia',
     slug: 'disfrutar-gastronomia',
     title: 'Deléitate con la gastronomía local',
     cardTitle: 'Gastronomía',
@@ -346,7 +323,7 @@ export const activities: Activity[] = [
       'La provincia de Santa Elena ofrece una rica y variada gastronomía, fusionando sabores autóctonos y marinos. Sus platos destacan por el uso de productos frescos del mar, como ceviches y mariscos, así como deliciosas preparaciones tradicionales como el bollo de pescado.',
       'La diversidad cultural de la región también se refleja en sus recetas, brindando una experiencia culinaria única para todos los gustos.',
     ],
-    cover: coverImage('gastronomia'),
+    cover: cover('gastronomia'),
     gallery: [],
     estacionalidad: 'Todo el año',
     horario: 'Todo el día',
@@ -359,7 +336,6 @@ export const activities: Activity[] = [
     beaches: ['montanita', 'salinas', 'ballenita'],
   },
   {
-    id: 'iglesias',
     slug: 'iglesias',
     title: 'Visita Iglesias emblemáticas',
     cardTitle: 'Iglesias',
@@ -369,7 +345,7 @@ export const activities: Activity[] = [
       'Conoce nuestra riqueza histórica y cultural reflejada en iglesias emblemáticas, joyas del patrimonio que enlazan la espiritualidad, historia y tradición local, haciendo de nuestra provincia un destino inigualable para los amantes del turismo religioso.',
       '¡Conecta con la tradición, reflexiona y renueva tu espíritu!',
     ],
-    cover: coverImage('iglesias'),
+    cover: cover('iglesias'),
     gallery: [],
     estacionalidad: 'Todo el año',
     horario: '06:00 - 20:00',
@@ -384,7 +360,6 @@ export const activities: Activity[] = [
     featured: false,
   },
   {
-    id: 'tradiciones-culturales',
     slug: 'tradiciones-culturales',
     title: 'Participa de las tradiciones locales',
     cardTitle: 'Tradiciones',
@@ -393,7 +368,7 @@ export const activities: Activity[] = [
     description: [
       'Las tradiciones locales en Santa Elena están muy ligadas a su fe y su relación con el mar, logrando una combinación muy especial, que representa una verdadera experiencia cultural para los visitantes.',
     ],
-    cover: coverImage('tradiciones'),
+    cover: cover('tradiciones'),
     gallery: [],
     estacionalidad: 'Acorde a lugar',
     horario: 'Todo el día',
@@ -404,10 +379,7 @@ export const activities: Activity[] = [
     transporte: [],
     featured: false,
   },
-
-  // ==================== DEPORTIVAS ====================
   {
-    id: 'ecociclismo',
     slug: 'ecociclismo',
     title: 'Recorre pedaleando los encantos naturales de Santa Elena',
     cardTitle: 'Ecociclismo',
@@ -418,7 +390,7 @@ export const activities: Activity[] = [
       'Arriésgate y realiza un recorrido en bicicleta a través de una variada topografía y paisajes costeros en los que podrás internarte en las montañas y viajar a lo largo de la costa, lo que se convierte en una experiencia dinámica y enriquecedora.',
       '¡Desafía tus límites y vive la emoción del ciclismo deportivo!',
     ],
-    cover: coverImage('ecociclismo'),
+    cover: cover('ecociclismo'),
     gallery: [],
     estacionalidad: 'Todo el año',
     horario: 'Todo el día',
@@ -443,7 +415,6 @@ export const activities: Activity[] = [
     beaches: ['montanita', 'chuyuipe', 'ballenita'],
   },
   {
-    id: 'deportes-acuaticos',
     slug: 'deportes-acuaticos',
     title: 'Practica Deportes Acuáticos',
     cardTitle: 'Deportes Acuáticos',
@@ -453,7 +424,7 @@ export const activities: Activity[] = [
       'Atrévete a practicar deportes y actividades acuáticas extremas en nuestras amplias y paradisiacas playas. Natación, kayak, parasailing, paddle surf, esquí acuático, entre otras opciones, están dentro de nuestra oferta turística.',
       'Es momento de vivir una experiencia inigualable.',
     ],
-    cover: coverImage('deportes-acuaticos'),
+    cover: cover('deportes-acuaticos'),
     gallery: [],
     estacionalidad: 'Todo el año',
     horario: '10:00 - 17:00',
@@ -461,19 +432,29 @@ export const activities: Activity[] = [
     dificultadLevel: 'media',
     operadores: [
       { name: 'Anna Paula', contact: { whatsapp: '593993848371' } },
-      { name: 'Ray Aguila Tour Operator', contact: { whatsapp: '593968694822' } },
+      {
+        name: 'Ray Aguila Tour Operator',
+        contact: { whatsapp: '593968694822' },
+      },
       { name: 'Padi Resort', contact: { whatsapp: '593987243126' } },
       { name: 'Comuna Dos Mangas', contact: { whatsapp: '593982798091' } },
       { name: 'Operadora JCCV', contact: { whatsapp: '593980033052' } },
       { name: 'Ecuador Expedition', contact: { whatsapp: '593968831287' } },
     ],
-    lugares: ['Salinas', 'La Libertad', 'Chuyuipe', 'San Pablo', 'Palmar', 'Ayangue', 'Montañita'],
+    lugares: [
+      'Salinas',
+      'La Libertad',
+      'Chuyuipe',
+      'San Pablo',
+      'Palmar',
+      'Ayangue',
+      'Montañita',
+    ],
     transporte: [],
     featured: false,
     beaches: ['salinas', 'montanita', 'ayangue'],
   },
   {
-    id: 'senderismo',
     slug: 'senderismo',
     title: 'Aventúrate a explorar bosques y senderos',
     cardTitle: 'Senderismo',
@@ -483,7 +464,7 @@ export const activities: Activity[] = [
       'Descubre los secretos de la Cordillera Chongón Colonche con rutas llenas de aventura, naturaleza, aves y vegetación única. Además, podrás visitar las reservas ecológicas, lugares excepcionales, con bosques nublados y paisajes verdes, sitio rico en cultura con comunidades que mantienen vivas sus tradiciones ancestrales.',
       'Conecta con la naturaleza en Santa Elena y desafía tus límites.',
     ],
-    cover: coverImage('senderismo'),
+    cover: cover('senderismo'),
     gallery: [],
     estacionalidad: 'Todo el año',
     horario: 'Todo el día',
@@ -506,10 +487,7 @@ export const activities: Activity[] = [
     featured: false,
     beaches: ['chuyuipe'],
   },
-
-  // ==================== NATURALES ====================
   {
-    id: 'avistamiento-aves',
     slug: 'avistamiento-aves',
     title: 'Observa gran variedad de aves silvestres y marinas',
     cardTitle: 'Avistamiento de Aves',
@@ -519,12 +497,12 @@ export const activities: Activity[] = [
       'Somos un verdadero paraíso de avistamiento de aves que atrae a ornitólogos, y a observadores aficionados y profesionales.',
       'Esta actividad se la puede realizar todo el año en sitios marinos que sirven de "paradero" de aves, donde es fácil observar diferentes especies alimentándose, mudando el plumaje o simplemente descansando antes de retomar su vuelo. Además, en varias áreas de conservación de la Cordillera Chongón Colonche, es posible ver cientos de especies de aves maravillosas y únicas.',
     ],
-    cover: coverImage('aves'),
+    cover: cover('aves'),
     gallery: [
-      galleryImage('aves', 1),
-      galleryImage('aves', 2),
-      galleryImage('aves', 3),
-      galleryImage('aves', 4),
+      gallery('aves', 1),
+      gallery('aves', 2),
+      gallery('aves', 3),
+      gallery('aves', 4),
     ],
     estacionalidad: 'Todo el año',
     horario: '10:00 - 17:00',
@@ -549,7 +527,6 @@ export const activities: Activity[] = [
     featured: false,
   },
   {
-    id: 'sumergete-en-la-belleza-natural-de-santa-elena',
     slug: 'sumergete-en-la-belleza-natural-de-santa-elena',
     title: 'Admira la belleza natural de Santa Elena',
     cardTitle: 'Belleza Natural',
@@ -559,12 +536,12 @@ export const activities: Activity[] = [
       'Sumérgete en la belleza natural de Santa Elena a través de una experiencia única y enriquecedora: una cabalgata que te llevará a explorar paisajes impresionantes y rincones ocultos de esta maravillosa región.',
       'Monta a caballo y déjate guiar por senderos rodeados de exuberante vegetación, mientras disfrutas de la tranquilidad y el esplendor de la naturaleza.',
     ],
-    cover: coverImage('belleza-natural'),
+    cover: cover('belleza-natural'),
     gallery: [
-      galleryImage('belleza-natural', 1),
-      galleryImage('belleza-natural', 2),
-      galleryImage('belleza-natural', 3),
-      galleryImage('belleza-natural', 4),
+      gallery('belleza-natural', 1),
+      gallery('belleza-natural', 2),
+      gallery('belleza-natural', 3),
+      gallery('belleza-natural', 4),
     ],
     estacionalidad: 'Todo el año',
     horario: '10:00 - 17:00',
@@ -580,7 +557,6 @@ export const activities: Activity[] = [
     featured: false,
   },
   {
-    id: 'cacao',
     slug: 'cacao',
     title: 'Encántate con la experiencia del cacao',
     cardTitle: 'Cacao',
@@ -590,13 +566,13 @@ export const activities: Activity[] = [
       'Conoce las plantaciones de cacao y disfruta los aromas y sabores de esta fruta de origen tropical, materia prima para la producción del chocolate.',
       'Las fincas ofrecen un tour de medio día, que incluye almuerzo; conjuntamente, podrás deleitarte con la variedad de frutas tropicales cultivadas en el lugar, y productos elaborados a base de cacao algarrobo, entre otros.',
     ],
-    cover: coverImage('cacao'),
+    cover: cover('cacao'),
     gallery: [
-      galleryImage('cacao', 1),
-      galleryImage('cacao', 2),
-      galleryImage('cacao', 3),
-      galleryImage('cacao', 4),
-      galleryImage('cacao', 5),
+      gallery('cacao', 1),
+      gallery('cacao', 2),
+      gallery('cacao', 3),
+      gallery('cacao', 4),
+      gallery('cacao', 5),
     ],
     estacionalidad: 'Todo el año',
     horario: '10:00 - 17:00',
@@ -612,7 +588,6 @@ export const activities: Activity[] = [
     featured: false,
   },
   {
-    id: 'cosechar-miel',
     slug: 'cosechar-miel',
     title: 'Explora el mundo de la Apicultura',
     cardTitle: 'Apicultura',
@@ -622,8 +597,8 @@ export const activities: Activity[] = [
       'Vive de cerca el fascinante mundo de la apicultura y cosecha de miel, proceso artesanal que refleja el compromiso con el cuidado del medio ambiente y la preservación de las prácticas agrícolas ancestrales, cuyo resultado es una miel de sabor único y de alta calidad.',
       'La apicultura es un arte que conecta a las personas con la naturaleza de una manera única. Al cuidar de las abejas, no solo estamos cultivando miel, sino también preservando la vida y el equilibrio ecológico del planeta.',
     ],
-    cover: coverImage('apicultura'),
-    gallery: [galleryImage('apicultura', 1), galleryImage('apicultura', 2)],
+    cover: cover('apicultura'),
+    gallery: [gallery('apicultura', 1), gallery('apicultura', 2)],
     estacionalidad: 'Todo el año',
     horario: '09:00 - 15:00',
     dificultad: 'Dificultad Media',
@@ -638,7 +613,6 @@ export const activities: Activity[] = [
     featured: false,
   },
   {
-    id: 'diversidad-faunistica',
     slug: 'diversidad-faunistica',
     title: 'Sorpréndete de la diversidad faunística',
     cardTitle: 'Fauna',
@@ -648,13 +622,13 @@ export const activities: Activity[] = [
       'Nuestra fauna y naturaleza te harán sentir una experiencia incomparable llena de una biodiversidad local y global.',
       'En el zoológico Rapaz Lana observarás la conservación, rescate y rehabilitación de aves rapaces; si eres un amante de los animales este es el lugar indicado. Puedes contemplar varios ejemplares de aves que nunca verás en tu vida de una forma educativa.',
     ],
-    cover: coverImage('fauna'),
+    cover: cover('fauna'),
     gallery: [
-      galleryImage('fauna', 1),
-      galleryImage('fauna', 2),
-      galleryImage('fauna', 3),
-      galleryImage('fauna', 4),
-      galleryImage('fauna', 5),
+      gallery('fauna', 1),
+      gallery('fauna', 2),
+      gallery('fauna', 3),
+      gallery('fauna', 4),
+      gallery('fauna', 5),
     ],
     estacionalidad: 'Todo el año',
     horario: '09:00 - 15:00',
@@ -666,7 +640,6 @@ export const activities: Activity[] = [
     featured: false,
   },
   {
-    id: 'paja-toquilla',
     slug: 'paja-toquilla',
     title: 'Conoce el proceso de la Paja Toquilla',
     cardTitle: 'Paja Toquilla',
@@ -676,23 +649,31 @@ export const activities: Activity[] = [
       'Esta forma de arte se ha transmitido a lo largo de generaciones y está profundamente arraigada en la cultura de los pobladores de la provincia de Santa Elena.',
       'Conoce el proceso para la obtención de la paja toquilla, fibra natural emblemática de la región costera, utilizada en la fabricación de sombreros y otros productos; arte ancestral que combina técnicas tradicionales y que refleja la habilidad de sus habitantes como testimonio de la riqueza cultural.',
     ],
-    cover: coverImage('paja-toquilla'),
+    cover: cover('paja-toquilla'),
     gallery: [
-      galleryImage('paja-toquilla', 1),
-      galleryImage('paja-toquilla', 2),
-      galleryImage('paja-toquilla', 3),
+      gallery('paja-toquilla', 1),
+      gallery('paja-toquilla', 2),
+      gallery('paja-toquilla', 3),
     ],
     estacionalidad: 'Todo el año',
     horario: 'Todo el día',
     dificultad: 'Dificultad Baja',
     dificultadLevel: 'baja',
     operadores: [
-      { name: 'Centro Artesanal de Procesamiento de Paja Toquilla', contact: { whatsapp: '593980362647' } },
+      {
+        name: 'Centro Artesanal de Procesamiento de Paja Toquilla',
+        contact: { whatsapp: '593980362647' },
+      },
       { name: 'Comuna Dos Mangas', contact: { whatsapp: '593982798091' } },
       { name: 'Sr. Sandro Tomalá', contact: { whatsapp: '593997813530' } },
       { name: 'Sra. Piedad Tomalá', contact: { whatsapp: '593997787835' } },
     ],
-    lugares: ['Comuna Febres Cordero', 'Comuna Barcelona', 'Comuna Loma Alta', 'Comuna Dos Mangas'],
+    lugares: [
+      'Comuna Febres Cordero',
+      'Comuna Barcelona',
+      'Comuna Loma Alta',
+      'Comuna Dos Mangas',
+    ],
     transporte: [
       'Cooperativa Costa Azul CICA',
       'Libertad Peninsular (CLP)',
@@ -704,7 +685,6 @@ export const activities: Activity[] = [
     featured: false,
   },
   {
-    id: 'parapente',
     slug: 'parapente',
     title: 'Vive la libertad de volar',
     cardTitle: 'Parapente',
@@ -715,19 +695,22 @@ export const activities: Activity[] = [
       'Tu adrenalina fluirá al máximo observando hermosos paisajes marinos marcados por la geografía costera y acantilados imponentes.',
       '¡Arriésgate! y lánzate en un vuelo tipo tándem con guías turísticos especializados.',
     ],
-    cover: coverImage('parapente'),
+    cover: cover('parapente'),
     gallery: [
-      galleryImage('parapente', 1),
-      galleryImage('parapente', 2),
-      galleryImage('parapente', 3),
-      galleryImage('parapente', 4),
+      gallery('parapente', 1),
+      gallery('parapente', 2),
+      gallery('parapente', 3),
+      gallery('parapente', 4),
     ],
     estacionalidad: 'Todo el año',
     horario: '09:00 - 18:00',
     dificultad: 'Dificultad Media',
     dificultadLevel: 'media',
     operadores: [
-      { name: 'Centro Turístico Comunitario San Pedro', contact: { whatsapp: '593980595124' } },
+      {
+        name: 'Centro Turístico Comunitario San Pedro',
+        contact: { whatsapp: '593980595124' },
+      },
       { name: 'Parapente Playa Bruja', contact: { whatsapp: '593969277289' } },
       { name: 'Ecuador Expeditions', contact: { whatsapp: '593968831287' } },
     ],
@@ -738,54 +721,20 @@ export const activities: Activity[] = [
   },
 ];
 
-// ==================== HELPERS ====================
-// Aceptan una lista como parámetro (para usar datos de la API);
-// si no se pasa, usan los datos estáticos locales.
+@Injectable()
+export class ActivitiesSeed implements OnModuleInit {
+  constructor(
+    @InjectRepository(Activity)
+    private readonly activities: Repository<Activity>,
+  ) {}
 
-export function getActivityBySlug(
-  slug: string,
-  list: Activity[] = activities,
-): Activity | undefined {
-  return list.find((a) => a.slug === slug);
-}
+  async onModuleInit() {
+    const count = await this.activities.count();
+    if (count > 0) return;
 
-export function getActivitiesByCategory(
-  category: ActivityCategory,
-  list: Activity[] = activities,
-): Activity[] {
-  return list.filter((a) => a.category === category);
-}
-
-export function getFeaturedActivities(list: Activity[] = activities): Activity[] {
-  return list.filter((a) => a.featured);
-}
-
-export function getCategoryById(id: ActivityCategory): Category | undefined {
-  return categories.find((c) => c.id === id);
-}
-
-// Color representativo de cada categoría (para badges y acentos)
-export function categoryColor(category: ActivityCategory): string {
-  switch (category) {
-    case 'Acuaticas':
-      return 'var(--clr-primary)';
-    case 'Culturales':
-      return '#f59e0b';
-    case 'Deportivas':
-      return '#e63946';
-    case 'Naturales':
-      return 'var(--clr-accent)';
-  }
-}
-
-// Color según el nivel de dificultad de la experiencia
-export function difficultyColor(level: Activity['dificultadLevel']): string {
-  switch (level) {
-    case 'baja':
-      return 'var(--clr-accent)';
-    case 'media':
-      return '#f59e0b';
-    case 'alta':
-      return '#e63946';
+    const rows = data.map((item) =>
+      this.activities.create(item as Partial<Activity>),
+    );
+    await this.activities.save(rows);
   }
 }

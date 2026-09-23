@@ -5,7 +5,10 @@ export class Beach {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ unique: true })
+  slug: string;
+
+  @Column({ unique: true })
   name: string;
 
   @Column('text')
@@ -17,16 +20,16 @@ export class Beach {
   @Column()
   location: string;
 
-  @Column('decimal', { precision: 10, scale: 7 })
-  latitude: number;
+  @Column('decimal', { precision: 10, scale: 7, nullable: true })
+  latitude: number | null;
 
-  @Column('decimal', { precision: 10, scale: 7 })
-  longitude: number;
+  @Column('decimal', { precision: 10, scale: 7, nullable: true })
+  longitude: number | null;
 
   @Column()
   imageUrl: string;
 
-  @Column('simple-array')
+  @Column('simple-array', { nullable: true })
   activities: string[];
 
   @Column('int', { default: 0 })
@@ -34,4 +37,16 @@ export class Beach {
 
   @Column()
   bestSeason: string;
+
+  @Column('text', { nullable: true })
+  knownFor: string;
+
+  @Column('jsonb', { nullable: true })
+  highlights: string[];
+
+  @Column('jsonb', { nullable: true })
+  tips: string[];
+
+  @Column('simple-array', { nullable: true })
+  gallery: string[];
 }

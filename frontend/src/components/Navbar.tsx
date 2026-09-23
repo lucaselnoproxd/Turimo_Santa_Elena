@@ -4,6 +4,7 @@ import Icon from './Icon';
 import { siteImages } from '../config/images';
 import { siteConfig } from '../config/site';
 import { categories, getActivitiesByCategory } from '../data/activities';
+import { useSiteData } from '../context/SiteDataContext';
 
 type MenuKey = 'Acuaticas' | 'Culturales' | 'Deportivas' | 'Naturales';
 
@@ -14,6 +15,7 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileMenu, setMobileMenu] = useState<MenuKey | null>(null);
   const [logoFailed, setLogoFailed] = useState(false);
+  const { activities } = useSiteData();
 
   return (
     <nav
@@ -94,7 +96,7 @@ export default function Navbar() {
                             boxShadow: '0 12px 40px rgba(0,119,182,0.15)',
                           }}
                         >
-                          {getActivitiesByCategory(key).map((a) => (
+                          {getActivitiesByCategory(key, activities).map((a) => (
                             <Link
                               key={a.slug}
                               to={`/experiencia/${a.slug}`}
@@ -159,7 +161,7 @@ export default function Navbar() {
                   </button>
                   {open && (
                     <div className="pl-4 space-y-1 pb-1">
-                      {getActivitiesByCategory(key).map((a) => (
+                      {getActivitiesByCategory(key, activities).map((a) => (
                         <Link
                           key={a.slug}
                           to={`/experiencia/${a.slug}`}

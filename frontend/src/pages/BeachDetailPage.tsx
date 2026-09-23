@@ -8,10 +8,11 @@ import GradientTitle from '../components/GradientTitle';
 import RatingStars from '../components/RatingStars';
 import TravelServices from '../components/TravelServices';
 import CoverImage from '../components/CoverImage';
-import { beaches } from '../data/beaches';
+import { useSiteData } from '../context/SiteDataContext';
 
 export default function BeachDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const { beaches } = useSiteData();
   const beach = beaches.find((b) => b.id === id);
 
   if (!beach) {

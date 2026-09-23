@@ -254,10 +254,10 @@ export const guides: Guide[] = [
   },
 ];
 
-export function getHotelsByBeach(beachId: string): Hotel[] {
-  return hotels.filter((h) => h.beachId === beachId);
+export function getHotelsByBeach(beachId: string, list: Hotel[] = hotels): Hotel[] {
+  return list.filter((h) => h.beachId === beachId);
 }
 
-export function getGuidesByBeach(beachId: string): Guide[] {
-  return guides.filter((g) => g.beachId === beachId);
+export function getGuidesByBeach(beachId: string, list: Guide[] = guides): Guide[] {
+  return list.filter((g) => g.beachId === beachId);
 }

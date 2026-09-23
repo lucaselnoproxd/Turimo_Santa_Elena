@@ -1,12 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Icon from './Icon';
 import Section from './Section';
 import type { Beach } from '../data/beaches';
-import { beaches } from '../data/beaches';
 import { getHotelsByBeach, getGuidesByBeach, type Hotel, type Guide } from '../data/services';
 import { initials } from '../lib/utils';
 import RatingStars from './RatingStars';
 import ContactButtons from './ContactButtons';
+import { useSiteData } from '../context/SiteDataContext';
 
 interface TravelServicesProps {
   beach?: Beach;
@@ -60,11 +60,31 @@ function GuidePhoto({ guide }: { guide: Guide }) {
 }
 
 export default function TravelServices({ beach }: TravelServicesProps) {
-  const [selectedId, setSelectedId] = useState(beach?.id ?? beaches[0].id);
+  const { beaches, hotels, guides } = useSiteData();
+  const [selectedId, setSelectedId] = useState(beach?.id ?? beaches[0]?.id ?? '');
+
+  useEffect(() => {
+    if (beach) setSelectedId(beach.id);
+  }, [beach]);
+
+  useEffect(() => {
+    if (!selectedId && beaches.length > 0) setSelectedId(beaches[0].id);
+  }, [beaches, selectedId]);
+
   const selected = beaches.find((b) => b.id === selectedId) ?? beaches[0];
 
-  const beachHotels = getHotelsByBeach(selected.id);
-  const beachGuides = getGuidesByBeach(selected.id);
+  const beachHotels = selected ? getHotelsByBeach(selected.id, hotels) : [];
+  const beachGuides = selected ? getGuidesByBeach(selected.id, guides) : [];
+
+  if (!selected) {
+    return (
+      <Section id="servicios" width="6xl">
+        <p className="text-center text-sm" style={{ color: 'var(--clr-text-muted)' }}>
+          Aún no tenemos información de hospedaje y tours.
+        </p>
+      </Section>
+    );
+  }
 
   return (
     <Section id="servicios" width="6xl">

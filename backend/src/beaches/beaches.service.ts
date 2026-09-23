@@ -7,16 +7,25 @@ import { Beach } from './beach.entity';
 export class BeachesService {
   constructor(
     @InjectRepository(Beach)
-    private beachesRepository: Repository<Beach>,
+    private readonly beaches: Repository<Beach>,
   ) {}
 
   findAll(): Promise<Beach[]> {
-    return this.beachesRepository.find();
+    return this.beaches.find();
   }
 
   async findOne(id: string): Promise<Beach> {
-    const beach = await this.beachesRepository.findOne({ where: { id } });
-    if (!beach) throw new NotFoundException(`Beach with id "${id}" not found`);
+    const beach = await this.beaches.findOne({ where: { id } });
+    if (!beach)
+      throw new NotFoundException(`Playa con id "${id}" no encontrada`);
+    return beach;
+  }
+
+  async findBySlug(slug: string): Promise<Beach> {
+    const beach = await this.beaches.findOne({ where: { slug } });
+    if (!beach) {
+      throw new NotFoundException(`Playa "${slug}" no encontrada`);
+    }
     return beach;
   }
 }

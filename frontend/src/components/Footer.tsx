@@ -2,10 +2,10 @@ import { Link } from 'react-router-dom';
 import Icon, { type IconName } from './Icon';
 import WhatsAppButton from './WhatsAppButton';
 import { siteConfig, waLink, mailtoLink, telLink } from '../config/site';
-import { activities } from '../data/activities';
-import { beaches } from '../data/beaches';
+import { useSiteData } from '../context/SiteDataContext';
 
 export default function Footer() {
+  const { activities, beaches } = useSiteData();
   const featured = activities.filter((a) => a.featured).slice(0, 6);
   const wa = waLink(siteConfig.contact.whatsapp);
   const mail = mailtoLink(siteConfig.contact.email);

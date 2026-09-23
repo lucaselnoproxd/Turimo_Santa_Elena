@@ -17,11 +17,12 @@ import {
   difficultyColor,
 } from '../data/activities';
 import { initials } from '../lib/utils';
-import { beaches } from '../data/beaches';
+import { useSiteData } from '../context/SiteDataContext';
 
 export default function ActivityPage() {
   const { slug } = useParams<{ slug: string }>();
-  const activity = slug ? getActivityBySlug(slug) : undefined;
+  const { activities, beaches } = useSiteData();
+  const activity = slug ? getActivityBySlug(slug, activities) : undefined;
 
   if (!activity) {
     return (
@@ -48,7 +49,7 @@ export default function ActivityPage() {
 
   const category = getCategoryById(activity.category);
   const color = categoryColor(activity.category);
-  const related = getActivitiesByCategory(activity.category).filter((a) => a.slug !== activity.slug).slice(0, 3);
+  const related = getActivitiesByCategory(activity.category, activities).filter((a) => a.slug !== activity.slug).slice(0, 3);
   const relatedBeaches = activity.beaches
     ?.map((id) => beaches.find((b) => b.id === id))
     .filter((b) => b !== undefined) ?? [];

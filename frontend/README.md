@@ -31,6 +31,12 @@ src/
 │   ├── beaches.ts     →  Playas destacadas
 │   ├── services.ts    →  Hoteles, guías y operadoras
 │   └── themes.ts      →  Paletas de color y TEMA ACTIVO
+├── lib/
+│   ├── api.ts         →  Cliente HTTP hacia la API (/api…)
+│   ├── api-mappers.ts →  Mapea la respuesta de la API a los tipos locales
+│   └── utils.ts       →  Helpers (iniciales, etc.)
+├── context/
+│   └── SiteDataContext.tsx →  Carga playas/actividades/servicios desde la API con fallback a src/data
 ├── components/        →  Navbar, Footer, ThemeProvider, CoverImage, WhatsAppButton…
 ├── pages/             →  Home, ExperienciaDetalle, PlayaDetalle…
 ├── images.ts          →  Helpers coverImage(), galleryImage(), beachImage()
@@ -38,6 +44,15 @@ src/
 ```
 
 ## Configuración rápida
+
+### Conexión con el backend
+
+El sitio funciona solo con datos estáticos (`src/data`). Para conectar la API NestJS:
+
+- **Desarrollo:** el proxy de Vite reenvía `/api` a `http://localhost:3000`, así que basta con arrancar el backend; `api.ts` usa la ruta relativa `/api`.
+- **Producción:** define `VITE_API_URL=https://backend-silk-one-43.vercel.app/api` (ya configurada en Vercel).
+
+`SiteDataContext` consulta la API y si falla usa los datos locales, así el sitio nunca se rompe. Si `VITE_API_URL` no está definida, `src/lib/api.ts` usa la ruta relativa `/api`.
 
 ### Datos de contacto (importante)
 

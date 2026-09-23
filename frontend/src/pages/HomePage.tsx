@@ -10,8 +10,8 @@ import WhatsAppButton from '../components/WhatsAppButton';
 import TravelServices from '../components/TravelServices';
 import Footer from '../components/Footer';
 import { categories, getActivitiesByCategory, categoryColor } from '../data/activities';
-import { beaches } from '../data/beaches';
 import { siteConfig, waLink } from '../config/site';
+import { useSiteData } from '../context/SiteDataContext';
 
 const categoryIds: Array<'Acuaticas' | 'Culturales' | 'Deportivas' | 'Naturales'> = [
   'Acuaticas',
@@ -29,6 +29,7 @@ const sectionIds: Record<string, string> = {
 
 export default function HomePage() {
   const wa = waLink(siteConfig.contact.whatsapp);
+  const { beaches, activities } = useSiteData();
 
   return (
     <div className="min-h-screen">
@@ -49,7 +50,7 @@ export default function HomePage() {
           {categoryIds.map((catId) => {
             const cat = categories.find((c) => c.id === catId);
             const color = categoryColor(catId);
-            const items = getActivitiesByCategory(catId);
+            const items = getActivitiesByCategory(catId, activities);
 
             return (
               <div key={catId} id={sectionIds[catId]} className="scroll-mt-24">
