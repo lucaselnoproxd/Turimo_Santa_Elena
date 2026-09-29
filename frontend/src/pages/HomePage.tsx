@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import PageHead, { SITE_URL } from '../components/PageHead';
 import WavesBackground from '../components/WavesBackground';
 import ActivityCarousel from '../components/ActivityCarousel';
 import ActivityCard from '../components/ActivityCard';
@@ -33,6 +34,26 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen">
+      <PageHead
+        title={`${siteConfig.tagline} · ${siteConfig.name}`}
+        description={siteConfig.description}
+        jsonLd={[
+          {
+            '@context': 'https://schema.org',
+            '@type': 'TouristDestination',
+            name: siteConfig.name,
+            description: siteConfig.description,
+            url: SITE_URL,
+            location: { '@type': 'Place', address: siteConfig.location },
+          },
+          {
+            '@context': 'https://schema.org',
+            '@type': 'WebSite',
+            name: siteConfig.name,
+            url: SITE_URL,
+          },
+        ]}
+      />
       <WavesBackground />
       <Navbar />
 
@@ -156,9 +177,13 @@ export default function HomePage() {
           <p className="text-base max-w-xl mx-auto mb-8" style={{ color: 'var(--clr-text-muted)' }}>
             Escríbenos por WhatsApp y te ayudamos a armar tu itinerario: operadoras, hospedaje, guías y transporte.
           </p>
-          <div className="flex flex-wrap justify-center gap-3">
+          <div className="flex flex-col items-center gap-4">
             {wa && <WhatsAppButton href={wa} label="Contactar por WhatsApp" />}
-            <a href="#experiencias" className="inline-flex items-center gap-2 px-7 py-3 text-sm font-bold gel-btn text-white">
+            <a
+              href="#experiencias"
+              className="inline-flex items-center gap-1.5 text-sm font-semibold transition-all duration-200 hover:underline underline-offset-4"
+              style={{ color: 'var(--clr-text-link)' }}
+            >
               Explorar experiencias
               <Icon name="chevron-down" className="w-4 h-4" />
             </a>

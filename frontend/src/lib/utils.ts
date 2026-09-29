@@ -8,3 +8,10 @@ export function initials(name: string): string {
     .join('')
     .slice(0, 2);
 }
+
+// Enlace a Google Maps de la zona general (barrio, comuna, cantón o
+// provincia), nunca el punto exacto. Siempre ancla a Santa Elena, Ecuador.
+export function mapsUrl(lugar: string): string {
+  const query = `${lugar}, Santa Elena, Ecuador`;
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+}

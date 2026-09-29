@@ -8,6 +8,10 @@ import { User } from '../users/user.entity';
 import { Itinerary } from '../itineraries/itinerary.entity';
 import { ItineraryDay } from '../itineraries/itinerary-day.entity';
 import { ItineraryItem } from '../itineraries/itinerary-item.entity';
+import { Evento } from '../eventos/evento.entity';
+import { Ubicacion } from '../ubicaciones/ubicacion.entity';
+import { Tema } from '../tema/tema.entity';
+import { Imagen } from '../imagenes/imagen.entity';
 
 const entities = [
   Beach,
@@ -17,6 +21,10 @@ const entities = [
   Itinerary,
   ItineraryDay,
   ItineraryItem,
+  Evento,
+  Ubicacion,
+  Tema,
+  Imagen,
 ];
 
 @Injectable()

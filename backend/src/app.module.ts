@@ -9,6 +9,11 @@ import { ActivitiesModule } from './activities/activities.module';
 import { ItinerariesModule } from './itineraries/itineraries.module';
 import { AuthModule } from './auth/auth.module';
 import { ServicesModule } from './services/services.module';
+import { AdminModule } from './admin/admin.module';
+import { EventosModule } from './eventos/eventos.module';
+import { UbicacionesModule } from './ubicaciones/ubicaciones.module';
+import { TemaModule } from './tema/tema.module';
+import { ImagenesModule } from './imagenes/imagenes.module';
 import { DatabaseConfig } from './config/database.config';
 
 @Module({
@@ -21,6 +26,11 @@ import { DatabaseConfig } from './config/database.config';
     ItinerariesModule,
     AuthModule,
     ServicesModule,
+    AdminModule,
+    EventosModule,
+    UbicacionesModule,
+    TemaModule,
+    ImagenesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

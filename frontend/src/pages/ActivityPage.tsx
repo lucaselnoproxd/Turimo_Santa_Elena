@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import PageHead, { SITE_URL } from '../components/PageHead';
 import WavesBackground from '../components/WavesBackground';
 import Footer from '../components/Footer';
 import Icon, { type IconName } from '../components/Icon';
@@ -16,7 +17,7 @@ import {
   categoryColor,
   difficultyColor,
 } from '../data/activities';
-import { initials } from '../lib/utils';
+import { initials, mapsUrl } from '../lib/utils';
 import { useSiteData } from '../context/SiteDataContext';
 
 export default function ActivityPage() {
@@ -27,6 +28,7 @@ export default function ActivityPage() {
   if (!activity) {
     return (
       <div className="min-h-screen">
+        <PageHead title="Experiencia no encontrada · Santa Elena Turismo" noindex />
         <WavesBackground />
         <Navbar />
         <div className="flex flex-col items-center justify-center pt-40 pb-24 px-4 text-center">
@@ -62,6 +64,20 @@ export default function ActivityPage() {
 
   return (
     <div className="min-h-screen">
+      <PageHead
+        title={`${activity.title} · Santa Elena Turismo`}
+        description={activity.tagline}
+        image={`${SITE_URL}${activity.cover}`}
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'TouristAttraction',
+          name: activity.title,
+          description: activity.tagline,
+          url: `${SITE_URL}/experiencia/${activity.slug}`,
+          image: `${SITE_URL}${activity.cover}`,
+          address: { '@type': 'PostalAddress', addressRegion: 'Santa Elena', addressCountry: 'EC' },
+        }}
+      />
       <WavesBackground />
       <Navbar />
 
@@ -147,7 +163,15 @@ export default function ActivityPage() {
                   {activity.lugares.map((place) => (
                     <li key={place} className="flex items-start gap-2.5 text-sm" style={{ color: 'var(--clr-text-body)' }}>
                       <Icon name="map-pin" className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color }} />
-                      {place}
+                      <a
+                        href={mapsUrl(place)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-medium underline-offset-2 hover:underline transition-all duration-200"
+                        style={{ color: 'var(--clr-text-link)' }}
+                      >
+                        {place}
+                      </a>
                     </li>
                   ))}
                 </ul>

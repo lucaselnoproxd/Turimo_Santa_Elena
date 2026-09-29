@@ -73,6 +73,7 @@ export default function ActivityCarousel() {
               src={carouselImage(slide.slug)}
               alt={slide.title}
               fullOnPortrait
+              fetchPriority={index === 0 ? 'high' : 'auto'}
               imgClassName={`transition-transform duration-[4000ms] ease-out ${
                 active ? 'scale-105' : 'scale-100'
               }`}
