@@ -185,6 +185,12 @@ export default function Footer() {
           <p className="text-xs font-light" style={{ color: 'color-mix(in srgb, var(--clr-primary) 25%, transparent)' }}>
             &copy; {new Date().getFullYear()} {siteConfig.name}. Todos los derechos reservados.
           </p>
+          <nav className="mt-3 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs font-medium">
+            <Link to="/" className="footer-link">Inicio</Link>
+            <Link to="/calendario" className="footer-link">Calendario de eventos</Link>
+            <Link to="/#playas" className="footer-link">Playas</Link>
+            <Link to="/#contacto" className="footer-link">Contacto</Link>
+          </nav>
         </div>
       </div>
     </footer>

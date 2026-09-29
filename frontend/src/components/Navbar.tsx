@@ -115,6 +115,9 @@ export default function Navbar() {
               <Link to="/#playas" className="px-4 py-2 text-sm font-semibold transition-all duration-200 nav-item">
                 Playas
               </Link>
+              <Link to="/calendario" className="px-4 py-2 text-sm font-semibold transition-all duration-200 nav-item">
+                Calendario
+              </Link>
               <Link
                 to="/#contacto"
                 className="px-4 py-2 text-sm font-bold text-white gel-btn ml-2"
@@ -179,6 +182,9 @@ export default function Navbar() {
             })}
             <Link to="/#playas" className="block px-4 py-3 text-sm font-semibold nav-item" onClick={() => setMobileOpen(false)}>
               Playas
+            </Link>
+            <Link to="/calendario" className="block px-4 py-3 text-sm font-semibold nav-item" onClick={() => setMobileOpen(false)}>
+              Calendario
             </Link>
             <Link to="/#contacto" className="block px-4 py-3 text-sm font-bold text-white gel-btn text-center" onClick={() => setMobileOpen(false)}>
               Contáctanos

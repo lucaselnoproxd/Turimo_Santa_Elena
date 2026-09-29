@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import BeachDetailPage from './pages/BeachDetailPage';
 import ActivityPage from './pages/ActivityPage';
+import EventosCalendarPage from './pages/EventosCalendarPage';
 
 function ScrollManager() {
   const { pathname, hash } = useLocation();
@@ -29,6 +30,7 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/experiencia/:slug" element={<ActivityPage />} />
         <Route path="/playa/:id" element={<BeachDetailPage />} />
+        <Route path="/calendario" element={<EventosCalendarPage />} />
       </Routes>
     </BrowserRouter>
   );
