@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import type { Request, Response } from 'express';
 import type { Express } from 'express';
@@ -18,7 +19,13 @@ async function bootstrap() {
       origin: origins,
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
       allowedHeaders: ['Content-Type', 'Authorization'],
+      credentials: true,
     });
+
+    // Validación global con class-validator (FASE 2, panel de admin).
+    app.useGlobalPipes(
+      new ValidationPipe({ whitelist: true, transform: true }),
+    );
 
     app.setGlobalPrefix('api');
     await app.init();
