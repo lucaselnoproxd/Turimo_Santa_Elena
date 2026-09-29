@@ -36,11 +36,11 @@ export const DEFAULT_COLORS = {
   textLink: '#1b8a36',
   textHeading: '#0b4e1e',
   textBody: '#0b4e1e',
-  textMuted: '#1b8a36',
+  textMuted: '#157430',
   star: '#2dc653',
   glow: 'rgba(45,198,83,0.5)',
   footerHeading: '#81c784',
-  footerText: 'rgba(129,199,132,0.6)',
+  footerText: 'rgba(129,199,132,0.92)',
   footerAccent: '#2dc653',
   surface: '#e8f5e9',
 };
