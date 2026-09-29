@@ -9,6 +9,8 @@ interface CoverImageProps {
   wrapperClassName?: string;
   /** Fuerza mostrar la foto completa en pantallas verticales, aunque sea horizontal */
   fullOnPortrait?: boolean;
+  /** Rinde la imagen como prioritaria (LCP), p. ej. en la portada */
+  fetchPriority?: 'high' | 'low' | 'auto';
 }
 
 // Muestra la foto completa (sin recortar) en pantallas verticales/móvil
@@ -21,6 +23,7 @@ export default function CoverImage({
   imgClassName = '',
   wrapperClassName = 'hero-shine',
   fullOnPortrait = false,
+  fetchPriority,
 }: CoverImageProps) {
   const [isVertical, setIsVertical] = useState(false);
   const full = isVertical || fullOnPortrait;
@@ -32,12 +35,15 @@ export default function CoverImage({
           src={src}
           alt=""
           aria-hidden
+          decoding="async"
           className="hidden portrait:block absolute inset-0 w-full h-full object-cover blur-md scale-110"
         />
       )}
       <img
         src={src}
         alt={alt}
+        decoding="async"
+        fetchPriority={fetchPriority}
         onLoad={(e) => setIsVertical(e.currentTarget.naturalHeight > e.currentTarget.naturalWidth)}
         className={`w-full h-full object-cover object-center ${full ? 'portrait:object-contain' : ''} ${imgClassName}`}
       />

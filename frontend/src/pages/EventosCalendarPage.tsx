@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
+import PageHead from '../components/PageHead';
 import WavesBackground from '../components/WavesBackground';
 import Footer from '../components/Footer';
 import Section from '../components/Section';
@@ -106,6 +107,20 @@ export default function EventosCalendarPage() {
   const deMes = (mes: number) => eventos.filter((e) => e.mes === mes);
   return (
     <div className="min-h-screen">
+      <PageHead
+        title="Calendario de eventos · Santa Elena Turismo"
+        description="Feriados, fiestas y temporadas de la provincia de Santa Elena: los mejores momentos del año para visitarla."
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'ItemList',
+          name: 'Eventos del año en Santa Elena',
+          itemListElement: eventos.map((e, i) => ({
+            '@type': 'ListItem',
+            position: i + 1,
+            name: e.titulo,
+          })),
+        }}
+      />
       <WavesBackground />
       <Navbar />
 

@@ -1,5 +1,6 @@
 ﻿import { Link, useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import PageHead, { SITE_URL } from '../components/PageHead';
 import WavesBackground from '../components/WavesBackground';
 import Footer from '../components/Footer';
 import Icon from '../components/Icon';
@@ -18,6 +19,7 @@ export default function BeachDetailPage() {
   if (!beach) {
     return (
       <div className="min-h-screen">
+        <PageHead title="Playa no encontrada · Santa Elena Turismo" noindex />
         <WavesBackground />
         <Navbar />
         <div className="flex flex-col items-center justify-center pt-40 pb-24 px-4 text-center">
@@ -40,6 +42,20 @@ export default function BeachDetailPage() {
 
   return (
     <div className="min-h-screen">
+      <PageHead
+        title={`${beach.name} · Playa en Santa Elena`}
+        description={beach.shortDescription}
+        image={`${SITE_URL}${beach.imageUrl}`}
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'TouristAttraction',
+          name: beach.name,
+          description: beach.shortDescription,
+          url: `${SITE_URL}/playa/${beach.id}`,
+          image: `${SITE_URL}${beach.imageUrl}`,
+          address: { '@type': 'PostalAddress', addressRegion: 'Santa Elena', addressCountry: 'EC' },
+        }}
+      />
       <WavesBackground />
       <Navbar />
 

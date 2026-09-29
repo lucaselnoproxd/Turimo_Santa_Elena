@@ -190,6 +190,9 @@ export default function Footer() {
             <Link to="/calendario" className="footer-link">Calendario de eventos</Link>
             <Link to="/#playas" className="footer-link">Playas</Link>
             <Link to="/#contacto" className="footer-link">Contacto</Link>
+            <Link to="/aviso-legal" className="footer-link">Aviso legal</Link>
+            <Link to="/privacidad" className="footer-link">Privacidad</Link>
+            <Link to="/cookies" className="footer-link">Cookies</Link>
           </nav>
         </div>
       </div>
