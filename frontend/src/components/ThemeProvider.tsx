@@ -1,5 +1,34 @@
 import { type ReactNode, useEffect } from 'react';
-import { themes, activeTheme } from '../data/themes';
+import { themes, activeTheme, type ThemeColors } from '../data/themes';
+
+const BASE_URL = import.meta.env.VITE_API_URL ?? '/api';
+
+const CSS_VARS: ReadonlyArray<{ var: string; key: keyof ThemeColors }> = [
+  { var: '--clr-primary', key: 'primary' },
+  { var: '--clr-primary-dark', key: 'primaryDark' },
+  { var: '--clr-primary-deeper', key: 'primaryDeeper' },
+  { var: '--clr-primary-light', key: 'primaryLight' },
+  { var: '--clr-accent', key: 'accent' },
+  { var: '--clr-accent-light', key: 'accentLight' },
+  { var: '--clr-text-link', key: 'textLink' },
+  { var: '--clr-text-heading', key: 'textHeading' },
+  { var: '--clr-text-body', key: 'textBody' },
+  { var: '--clr-text-muted', key: 'textMuted' },
+  { var: '--clr-star', key: 'star' },
+  { var: '--clr-glow', key: 'glow' },
+  { var: '--clr-footer-heading', key: 'footerHeading' },
+  { var: '--clr-footer-text', key: 'footerText' },
+  { var: '--clr-footer-accent', key: 'footerAccent' },
+  { var: '--clr-surface', key: 'surface' },
+];
+
+function applyColors(colors: Partial<ThemeColors>) {
+  const root = document.documentElement;
+  for (const { var: cssVar, key } of CSS_VARS) {
+    const value = colors[key];
+    if (typeof value === 'string') root.style.setProperty(cssVar, value);
+  }
+}
 
 interface ThemeProviderProps {
   children: ReactNode;
@@ -8,27 +37,24 @@ interface ThemeProviderProps {
 export default function ThemeProvider({ children }: ThemeProviderProps) {
   useEffect(() => {
     const theme = themes[activeTheme];
-    if (!theme) return;
+    if (theme) applyColors(theme.colors);
 
-    const root = document.documentElement;
-    const c = theme.colors;
+    // FASE 2: el tema puede editarse desde el panel de admin.
+    // Se pide el tema remoto, pero si no hay backend o falla,
+    // el sitio sigue funcionando con el tema local predefinido.
+    let cancelled = false;
+    fetch(`${BASE_URL}/theme`)
+      .then((res) => (res.ok ? (res.json() as Promise<{ colors?: Partial<ThemeColors> }>) : null))
+      .then((data) => {
+        if (!cancelled && data?.colors) applyColors(data.colors);
+      })
+      .catch(() => {
+        // tema local ya aplicado = suficiente
+      });
 
-    root.style.setProperty('--clr-primary', c.primary);
-    root.style.setProperty('--clr-primary-dark', c.primaryDark);
-    root.style.setProperty('--clr-primary-deeper', c.primaryDeeper);
-    root.style.setProperty('--clr-primary-light', c.primaryLight);
-    root.style.setProperty('--clr-accent', c.accent);
-    root.style.setProperty('--clr-accent-light', c.accentLight);
-    root.style.setProperty('--clr-text-link', c.textLink);
-    root.style.setProperty('--clr-text-heading', c.textHeading);
-    root.style.setProperty('--clr-text-body', c.textBody);
-    root.style.setProperty('--clr-text-muted', c.textMuted);
-    root.style.setProperty('--clr-star', c.star);
-    root.style.setProperty('--clr-glow', c.glow);
-    root.style.setProperty('--clr-footer-heading', c.footerHeading);
-    root.style.setProperty('--clr-footer-text', c.footerText);
-    root.style.setProperty('--clr-footer-accent', c.footerAccent);
-    root.style.setProperty('--clr-surface', c.surface);
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return <>{children}</>;

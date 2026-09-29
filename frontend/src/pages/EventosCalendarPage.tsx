@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import WavesBackground from '../components/WavesBackground';
 import Footer from '../components/Footer';
@@ -5,7 +6,32 @@ import Section from '../components/Section';
 import SectionHeading from '../components/SectionHeading';
 import RatingStars from '../components/RatingStars';
 import type { EventoCalendario } from '../data/eventos';
-import { MESES, TIPO_INFO, eventosDeMes } from '../data/eventos';
+import { MESES, TIPO_INFO, eventosCalendario } from '../data/eventos';
+
+const BASE_URL = import.meta.env.VITE_API_URL ?? '/api';
+
+function useRemoteEventos(): EventoCalendario[] {
+  const [eventos, setEventos] = useState<EventoCalendario[]>(eventosCalendario);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch(`${BASE_URL}/eventos`)
+      .then((res) => (res.ok ? (res.json() as Promise<EventoCalendario[]>) : null))
+      .then((data) => {
+        if (!cancelled && Array.isArray(data) && data.length > 0) {
+          setEventos(data);
+        }
+      })
+      .catch(() => {
+        // sin backend: se usa el calendario local
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return eventos;
+}
 
 function FechaBadge({ evento }: { evento: EventoCalendario }) {
   if (evento.movil) {
@@ -52,9 +78,7 @@ function EventoCard({ evento }: { evento: EventoCalendario }) {
   );
 }
 
-function MesGrid({ mes, titulo }: { mes: number; titulo: string }) {
-  const eventos = eventosDeMes(mes);
-
+function MesGrid({ titulo, eventos }: { titulo: string; eventos: EventoCalendario[] }) {
   return (
     <section
       className="gel-card shine p-5 flex flex-col"
@@ -78,6 +102,8 @@ function MesGrid({ mes, titulo }: { mes: number; titulo: string }) {
 }
 
 export default function EventosCalendarPage() {
+  const eventos = useRemoteEventos();
+  const deMes = (mes: number) => eventos.filter((e) => e.mes === mes);
   return (
     <div className="min-h-screen">
       <WavesBackground />
@@ -93,7 +119,7 @@ export default function EventosCalendarPage() {
         {/* Grid escritorio / tablet */}
         <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-5">
           {MESES.map((mesNom, i) => (
-            <MesGrid key={mesNom} mes={i + 1} titulo={mesNom} />
+            <MesGrid key={mesNom} titulo={mesNom} eventos={deMes(i + 1)} />
           ))}
         </div>
 
@@ -112,7 +138,7 @@ export default function EventosCalendarPage() {
                 <span className="font-heading text-base font-bold">{mesNom}</span>
                 <span className="flex items-center gap-2">
                   <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--clr-text-muted)' }}>
-                    {eventosDeMes(i + 1).length} {eventosDeMes(i + 1).length === 1 ? 'evento' : 'eventos'}
+                    {deMes(i + 1).length} {deMes(i + 1).length === 1 ? 'evento' : 'eventos'}
                   </span>
                   <span
                     className="transition-transform duration-200 group-open:rotate-180"
@@ -123,7 +149,7 @@ export default function EventosCalendarPage() {
                 </span>
               </summary>
               <ul className="px-5 pb-4">
-                {eventosDeMes(i + 1).map((e) => (
+                {deMes(i + 1).map((e) => (
                   <EventoCard key={`${e.mes}-${e.dia ?? 0}-${e.titulo}`} evento={e} />
                 ))}
               </ul>

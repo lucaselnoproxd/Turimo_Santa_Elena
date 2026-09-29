@@ -4,6 +4,8 @@ import HomePage from './pages/HomePage';
 import BeachDetailPage from './pages/BeachDetailPage';
 import ActivityPage from './pages/ActivityPage';
 import EventosCalendarPage from './pages/EventosCalendarPage';
+import AdminLoginPage from './pages/admin/AdminLoginPage';
+import AdminDashboardPage from './pages/admin/AdminDashboardPage';
 
 function ScrollManager() {
   const { pathname, hash } = useLocation();
@@ -31,6 +33,8 @@ export default function App() {
         <Route path="/experiencia/:slug" element={<ActivityPage />} />
         <Route path="/playa/:id" element={<BeachDetailPage />} />
         <Route path="/calendario" element={<EventosCalendarPage />} />
+        <Route path="/admin/login" element={<AdminLoginPage />} />
+        <Route path="/admin" element={<AdminDashboardPage />} />
       </Routes>
     </BrowserRouter>
   );
